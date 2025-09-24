@@ -3,155 +3,205 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Contoh SPA - Navigasi (GitHub Pages Friendly)</title>
+  <title>Web Content Viewer — Lihat konten web</title>
   <style>
-    :root{--bg:#0f1724;--card:#0b1220;--muted:#94a3b8;--accent:#60a5fa}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;background:linear-gradient(180deg,#071122 0%,#071733 100%);color:#e6eef8;min-height:100vh;display:flex;flex-direction:column}
-    header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:rgba(255,255,255,0.02);backdrop-filter:blur(6px)}
-    .brand{font-weight:700;letter-spacing:0.4px}
-    nav a{color:var(--muted);text-decoration:none;margin:0 8px;font-weight:600}
-    nav a.active{color:var(--accent)}
-    main{flex:1;padding:28px;max-width:960px;margin:0 auto;width:100%}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px;box-shadow:0 6px 24px rgba(2,6,23,0.6)}
-    h1{margin:0 0 8px 0}
-    p.lead{color:var(--muted);margin-top:0}
-    .controls{display:flex;gap:8px;margin-top:14px}
-    .btn{padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit;cursor:pointer}
-    .btn.primary{background:linear-gradient(90deg,#3b82f6,#06b6d4);color:#04202a;border:none}
-    footer{padding:12px 20px;text-align:center;color:var(--muted);font-size:14px}
-
-    /* simple page transition */
-    .view{opacity:0;transform:translateY(8px);transition:all .28s ease;display:none}
-    .view.active{display:block;opacity:1;transform:none}
-
-    /* responsive */
-    @media (max-width:640px){header{flex-direction:column;align-items:flex-start}nav{margin-top:8px}}
+    :root{--bg:#0f1724;--card:#0b1220;--muted:#9aa4b2;--accent:#3b82f6}
+    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial}
+    body{background:linear-gradient(180deg,#071226 0%, #07182a 100%);color:#e6eef6}
+    .app{max-width:1100px;margin:28px auto;padding:18px}
+    header{display:flex;gap:12px;align-items:center}
+    h1{font-size:18px;margin:0}
+    .controls{display:flex;gap:8px;margin-top:12px}
+    input[type=text]{flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:inherit}
+    button{padding:10px 12px;border-radius:8px;border:0;background:var(--accent);color:#fff;cursor:pointer}
+    .secondary{background:transparent;border:1px solid rgba(255,255,255,0.06)}
+    .panels{display:grid;grid-template-columns:1fr 360px;gap:12px;margin-top:12px}
+    .card{background:var(--card);border-radius:12px;padding:12px;box-shadow:0 6px 20px rgba(2,6,23,0.6)}
+    iframe{width:100%;height:600px;border-radius:8px;border:1px solid rgba(255,255,255,0.04)}
+    .meta{font-size:13px;color:var(--muted);margin-top:8px}
+    .bookmarks{display:flex;flex-direction:column;gap:8px}
+    .bm{padding:8px;border-radius:8px;background:rgba(255,255,255,0.02);cursor:pointer}
+    .tiny{font-size:12px;color:var(--muted)}
+    .modes{display:flex;gap:6px}
+    .note{margin-top:8px;font-size:13px;color:#ffdca8;background:linear-gradient(90deg,#43321b22,#43321b11);padding:8px;border-radius:8px}
+    footer{margin-top:12px;font-size:13px;color:var(--muted)}
   </style>
 </head>
 <body>
-  <header>
-    <div class="brand">My GitHub Pages SPA</div>
-    <nav>
-      <a href="#/" data-link="/" class="navlink">Home</a>
-      <a href="#/about" data-link="/about" class="navlink">About</a>
-      <a href="#/projects" data-link="/projects" class="navlink">Projects</a>
-      <a href="#/contact" data-link="/contact" class="navlink">Contact</a>
-    </nav>
-  </header>
-
-  <main>
-    <section id="home" class="view card" data-route="/">
-      <h1>Selamat datang!</h1>
-      <p class="lead">Ini contoh single-page app (SPA) sederhana yang menggunakan hash routing sehingga aman dipasang di GitHub Pages. Klik menu atau gunakan tombol "Selanjutnya" / "Sebelumnya" untuk berpindah.</p>
-      <div class="controls">
-        <button class="btn" id="prevBtn">⟨ Sebelumnya</button>
-        <button class="btn primary" id="nextBtn">Selanjutnya ⟩</button>
+  <div class="app">
+    <header>
+      <div>
+        <h1>Web Content Viewer</h1>
+        <div class="tiny">Masukkan URL lalu tekan "Tampilkan" untuk melihat halaman dalam iframe atau coba ekstrak konten (tergantung CORS).</div>
       </div>
-    </section>
+    </header>
 
-    <section id="about" class="view card" data-route="/about">
-      <h1>Tentang</h1>
-      <p class="lead">Halaman ini berisi deskripsi singkat. Pada GitHub Pages, file ini dapat diletakkan di repository dan langsung diakses sebagai halaman statis.</p>
-      <div class="controls">
-        <button class="btn" id="prevBtn2">⟨ Sebelumnya</button>
-        <button class="btn primary" id="nextBtn2">Selanjutnya ⟩</button>
+    <div class="controls">
+      <input id="urlInput" type="text" placeholder="https://example.com — masukkan URL situs yang ingin dilihat" value="https://example.com">
+      <button id="showBtn">Tampilkan</button>
+      <button id="extractBtn" class="secondary">Coba Ekstrak Konten</button>
+      <button id="youtubeBtn" class="secondary">Embed YouTube</button>
+    </div>
+
+    <div class="panels">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <strong>Preview</strong>
+            <div class="tiny">Gunakan mode "Mobile" untuk melihat tampilan responsif.</div>
+          </div>
+          <div class="modes">
+            <select id="deviceSelect">
+              <option value="desktop">Desktop</option>
+              <option value="mobile">Mobile (375×667)</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="frameWrap" style="margin-top:12px">
+          <iframe id="previewFrame" srcdoc="<p style=\"font-family:Inter,Arial; padding:20px\">Tidak ada preview. Masukkan URL lalu tekan Tampilkan.</p>"></iframe>
+        </div>
+
+        <div class="meta" id="metaInfo"></div>
+
+        <div class="note" id="corsNote">Catatan: Beberapa situs mencegah pemuatan dalam iframe (X-Frame-Options) atau memblokir fetch karena CORS. Jika preview blank atau ekstraksi gagal, coba gunakan server proxy CORS atau jalankan file ini di server yang Anda kontrol.</div>
       </div>
-    </section>
 
-    <section id="projects" class="view card" data-route="/projects">
-      <h1>Project</h1>
-      <p class="lead">Contoh daftar project. Tombol di bawah memudahkan pindah antar-halaman.</p>
-      <ul>
-        <li>Project A — Demo</li>
-        <li>Project B — Demo</li>
-        <li>Project C — Demo</li>
-      </ul>
-      <div class="controls">
-        <button class="btn" id="prevBtn3">⟨ Sebelumnya</button>
-        <button class="btn primary" id="nextBtn3">Selanjutnya ⟩</button>
-      </div>
-    </section>
+      <aside class="card">
+        <strong>Bookmarks & Tools</strong>
+        <div class="bookmarks" id="bookmarks" style="margin-top:8px">
+          <!-- bookmarks go here -->
+        </div>
 
-    <section id="contact" class="view card" data-route="/contact">
-      <h1>Kontak</h1>
-      <p class="lead">Email: nama@domain.tld<br/>Instagram: @contoh</p>
-      <div class="controls">
-        <button class="btn" id="prevBtn4">⟨ Sebelumnya</button>
-        <button class="btn primary" id="nextBtn4">Selanjutnya ⟩</button>
-      </div>
-    </section>
-  </main>
+        <div style="margin-top:12px">
+          <button id="saveBmBtn" class="secondary">Simpan Bookmark Saat Ini</button>
+          <div style="height:8px"></div>
+          <button id="clearBmBtn" class="secondary">Hapus Semua Bookmark</button>
+        </div>
 
-  <footer>Built for GitHub Pages • Hash routing (#/path) — cocok untuk repositori statis</footer>
+        <hr style="border:none;height:8px">
+        <div class="tiny"><strong>Tips:</strong>
+          <ul>
+            <li>Untuk menampilkan halaman yang memblokir iframe, gunakan <em>embed</em> publik (YouTube, Vimeo) atau server proxy.</li>
+            <li>Fungsi ekstrak mencoba mengambil tag &lt;title&gt; dan konten &lt;meta property="og:description"&gt; via fetch.</li>
+            <li>Jika ingin menyematkan konten Anda sendiri (artikel, gambar), Anda dapat menyimpan HTML di folder lokal dan membuka file ini dari server lokal.</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      <div class="tiny">Created with ❤️ — Masih sederhana tapi bisa dikembangkan: tambahkan proxy, integrasi RSS, atau server-side rendering untuk ekstraksi lebih andal.</div>
+    </footer>
+  </div>
 
   <script>
-    // simple hash-based router and previous/next navigation
-    const routes = ['/', '/about', '/projects', '/contact'];
-    const routeToId = {'/':'home','/about':'about','/projects':'projects','/contact':'contact'};
+    const urlInput = document.getElementById('urlInput');
+    const showBtn = document.getElementById('showBtn');
+    const extractBtn = document.getElementById('extractBtn');
+    const youtubeBtn = document.getElementById('youtubeBtn');
+    const frame = document.getElementById('previewFrame');
+    const metaInfo = document.getElementById('metaInfo');
+    const deviceSelect = document.getElementById('deviceSelect');
+    const bookmarksEl = document.getElementById('bookmarks');
+    const saveBmBtn = document.getElementById('saveBmBtn');
+    const clearBmBtn = document.getElementById('clearBmBtn');
 
-    function setActiveRoute(path){
-      if(!routes.includes(path)) path = '/';
-      // update views
-      document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-      const id = routeToId[path];
-      document.getElementById(id).classList.add('active');
-      // update nav link styles
-      document.querySelectorAll('.navlink').forEach(a=>a.classList.remove('active'));
-      const link = document.querySelector(`a[data-link='${path}']`);
-      if(link) link.classList.add('active');
-      // update hash if necessary
-      const desiredHash = '#'+path;
-      if(location.hash !== desiredHash) location.hash = desiredHash;
+    // load bookmarks from localStorage
+    let bookmarks = JSON.parse(localStorage.getItem('wc_bookmarks') || '[]');
+    function renderBookmarks(){
+      bookmarksEl.innerHTML = '';
+      if(bookmarks.length===0){ bookmarksEl.innerHTML = '<div class="tiny">(Belum ada bookmark)</div>'; return }
+      bookmarks.forEach((b, i)=>{
+        const el = document.createElement('div'); el.className='bm'; el.innerHTML = `<div style="font-weight:600">${b.title||b.url}</div><div class="tiny">${b.url}</div>`;
+        el.onclick = ()=>{ urlInput.value = b.url; showPreview(); }
+        const del = document.createElement('button'); del.textContent='Hapus'; del.style.float='right'; del.onclick = (ev)=>{ ev.stopPropagation(); bookmarks.splice(i,1); saveBookmarks(); renderBookmarks(); }
+        el.appendChild(del);
+        bookmarksEl.appendChild(el);
+      })
+    }
+    function saveBookmarks(){ localStorage.setItem('wc_bookmarks', JSON.stringify(bookmarks)); }
+    renderBookmarks();
+
+    function setFrameSize(){
+      const wrap = document.getElementById('frameWrap');
+      if(deviceSelect.value==='mobile'){
+        frame.style.width='375px'; frame.style.height='667px'; frame.style.margin='0 auto';
+      } else { frame.style.width='100%'; frame.style.height='600px'; frame.style.margin='0'; }
+    }
+    deviceSelect.addEventListener('change', setFrameSize);
+
+    function showPreview(){
+      const url = urlInput.value.trim();
+      if(!url) return alert('Masukkan URL dulu.');
+      // normalize
+      const u = url.match(/^https?:\/\//) ? url : 'https://' + url;
+      frame.src = u; // try load directly into iframe
+      metaInfo.textContent = 'Memuat...';
+      // try fetch & parse for title/og (may fail due to CORS)
+      fetch(u).then(r=>r.text()).then(txt=>{
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(txt, 'text/html');
+        const title = doc.querySelector('title') ? doc.querySelector('title').innerText : '';
+        const og = doc.querySelector('meta[property="og:description"]') ? doc.querySelector('meta[property="og:description"]').content : (doc.querySelector('meta[name="description"]') ? doc.querySelector('meta[name="description"]').content : '—');
+        metaInfo.innerHTML = `<div><strong>${title || '(tanpa title)'}</strong></div><div class="tiny">${og}</div>`;
+      }).catch(err=>{
+        metaInfo.innerHTML = '<div class="tiny">Gagal ekstrak konten via fetch (kemungkinan CORS). Untuk ekstraksi andal, jalankan server proxy atau gunakan layanan server-side.</div>';
+      })
+      setFrameSize();
     }
 
-    function onHashChanged(){
-      const raw = location.hash || '#/';
-      const path = raw.replace('#','');
-      setActiveRoute(path);
-    }
+    showBtn.addEventListener('click', showPreview);
 
-    window.addEventListener('hashchange', onHashChanged);
-
-    // init
-    if(!location.hash) location.hash = '#/';
-    onHashChanged();
-
-    // previous/next button wiring
-    function goToIndex(i){
-      const idx = (i + routes.length) % routes.length;
-      setActiveRoute(routes[idx]);
-    }
-
-    // find index of current route
-    function currentIndex(){
-      const raw = location.hash || '#/';
-      const path = raw.replace('#','');
-      return routes.indexOf(path);
-    }
-
-    // wire all .btn controls with role prev/next based on their container
-    document.querySelectorAll('.view').forEach((view, i)=>{
-      const prev = view.querySelector('.btn');
-      const next = view.querySelector('.btn.primary');
-      if(prev) prev.addEventListener('click', ()=> goToIndex(i-1));
-      if(next) next.addEventListener('click', ()=> goToIndex(i+1));
+    extractBtn.addEventListener('click', ()=>{
+      const url = urlInput.value.trim(); if(!url) return alert('Masukkan URL dulu.');
+      const u = url.match(/^https?:\/\//) ? url : 'https://' + url;
+      metaInfo.textContent = 'Mencoba ekstrak konten via fetch...';
+      fetch(u).then(r=>r.text()).then(txt=>{
+        const parser = new DOMParser(); const doc = parser.parseFromString(txt,'text/html');
+        // naive article extraction: get first <article> or longest <p> block
+        let article = doc.querySelector('article');
+        if(!article){
+          const ps = Array.from(doc.querySelectorAll('p'));
+          ps.sort((a,b)=>b.innerText.length - a.innerText.length);
+          article = ps[0] || null;
+        }
+        if(article){
+          const out = article.innerText.trim().slice(0,2000);
+          metaInfo.innerHTML = `<div><strong>Hasil ekstraksi (potongan):</strong></div><div style="margin-top:8px">${out.replace(/\n/g,'<br>')}</div>`;
+        } else metaInfo.textContent = 'Tidak ditemukan konten artikel.';
+      }).catch(err=>{
+        metaInfo.innerHTML = '<div class="tiny">Ekstraksi gagal (CORS atau jaringan). Gunakan server-side proxy atau layanan ekstraksi untuk bypass CORS.</div>';
+      })
     });
 
-    // also allow left/right arrows
-    window.addEventListener('keydown', (e)=>{
-      if(e.key === 'ArrowLeft') goToIndex(currentIndex()-1);
-      if(e.key === 'ArrowRight') goToIndex(currentIndex()+1);
+    youtubeBtn.addEventListener('click', ()=>{
+      const v = prompt('Masukkan ID video YouTube atau URL (contoh: dQw4w9WgXcQ):');
+      if(!v) return;
+      let id = v;
+      try{ const m = v.match(/(?:v=|youtu\.be\/|\/embed\/)([A-Za-z0-9_-]{11})/); if(m) id = m[1]; }
+      catch(e){}
+      const embed = `https://www.youtube.com/embed/${id}`;
+      frame.src = embed;
+      metaInfo.innerHTML = `<div class="tiny">Embed YouTube: ${id}</div>`;
+      setFrameSize();
     });
 
-    // accessibility: allow clicking nav to set route without page jump
-    document.querySelectorAll('a[data-link]').forEach(a=>{
-      a.addEventListener('click', (ev)=>{
-        ev.preventDefault();
-        const path = a.getAttribute('data-link');
-        setActiveRoute(path);
-      });
+    saveBmBtn.addEventListener('click', ()=>{
+      const url = urlInput.value.trim(); if(!url) return alert('Masukkan URL dulu.');
+      const u = url.match(/^https?:\/\//) ? url : 'https://' + url;
+      // try get title quickly
+      fetch(u).then(r=>r.text()).then(txt=>{
+        const parser = new DOMParser(); const doc = parser.parseFromString(txt,'text/html');
+        const title = doc.querySelector('title') ? doc.querySelector('title').innerText : u;
+        bookmarks.unshift({url:u,title}); if(bookmarks.length>25) bookmarks.pop(); saveBookmarks(); renderBookmarks();
+      }).catch(err=>{
+        bookmarks.unshift({url:u,title:u}); saveBookmarks(); renderBookmarks();
+      })
     });
+
+    clearBmBtn.addEventListener('click', ()=>{ if(confirm('Hapus semua bookmark?')){ bookmarks=[]; saveBookmarks(); renderBookmarks(); } });
+
   </script>
 </body>
 </html>

@@ -1,205 +1,157 @@
 <!doctype html>
 <html lang="id">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Demo: Bisa Berpindah-pindah (Carousel + Draggable)</title>
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contoh SPA - Navigasi (GitHub Pages Friendly)</title>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--muted:#94a3b8;--accent:#60a5fa}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;background:linear-gradient(180deg,#071122 0%,#071733 100%);color:#e6eef8;min-height:100vh;display:flex;flex-direction:column}
+    header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:rgba(255,255,255,0.02);backdrop-filter:blur(6px)}
+    .brand{font-weight:700;letter-spacing:0.4px}
+    nav a{color:var(--muted);text-decoration:none;margin:0 8px;font-weight:600}
+    nav a.active{color:var(--accent)}
+    main{flex:1;padding:28px;max-width:960px;margin:0 auto;width:100%}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px;box-shadow:0 6px 24px rgba(2,6,23,0.6)}
+    h1{margin:0 0 8px 0}
+    p.lead{color:var(--muted);margin-top:0}
+    .controls{display:flex;gap:8px;margin-top:14px}
+    .btn{padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit;cursor:pointer}
+    .btn.primary{background:linear-gradient(90deg,#3b82f6,#06b6d4);color:#04202a;border:none}
+    footer{padding:12px 20px;text-align:center;color:var(--muted);font-size:14px}
+
+    /* simple page transition */
+    .view{opacity:0;transform:translateY(8px);transition:all .28s ease;display:none}
+    .view.active{display:block;opacity:1;transform:none}
+
+    /* responsive */
+    @media (max-width:640px){header{flex-direction:column;align-items:flex-start}nav{margin-top:8px}}
+  </style>
 </head>
 <body>
+  <header>
+    <div class="brand">My GitHub Pages SPA</div>
+    <nav>
+      <a href="#/" data-link="/" class="navlink">Home</a>
+      <a href="#/about" data-link="/about" class="navlink">About</a>
+      <a href="#/projects" data-link="/projects" class="navlink">Projects</a>
+      <a href="#/contact" data-link="/contact" class="navlink">Contact</a>
+    </nav>
+  </header>
 
-<div class="card" aria-label="carousel-card">
-  <h1>Carousel: Geser / Klik / Swipe</h1>
-  <div class="carousel-wrap" id="carouselWrap">
-    <div class="carousel" id="carousel">
-      <div class="slide">Slide 1 — Selamat datang! (Konten bisa apa saja)</div>
-      <div class="slide">Slide 2 — Ini contoh slide kedua</div>
-      <div class="slide">Slide 3 — Slide ketiga, selesai</div>
-    </div>
-  </div>
+  <main>
+    <section id="home" class="view card" data-route="/">
+      <h1>Selamat datang!</h1>
+      <p class="lead">Ini contoh single-page app (SPA) sederhana yang menggunakan hash routing sehingga aman dipasang di GitHub Pages. Klik menu atau gunakan tombol "Selanjutnya" / "Sebelumnya" untuk berpindah.</p>
+      <div class="controls">
+        <button class="btn" id="prevBtn">⟨ Sebelumnya</button>
+        <button class="btn primary" id="nextBtn">Selanjutnya ⟩</button>
+      </div>
+    </section>
 
-  <div class="controls">
-    <div>
-      <button class="btn" id="prevBtn" aria-label="Previous">Prev</button>
-      <button class="btn" id="nextBtn" aria-label="Next">Next</button>
-    </div>
-    <div class="dots" id="dots"></div>
-  </div>
-</div>
+    <section id="about" class="view card" data-route="/about">
+      <h1>Tentang</h1>
+      <p class="lead">Halaman ini berisi deskripsi singkat. Pada GitHub Pages, file ini dapat diletakkan di repository dan langsung diakses sebagai halaman statis.</p>
+      <div class="controls">
+        <button class="btn" id="prevBtn2">⟨ Sebelumnya</button>
+        <button class="btn primary" id="nextBtn2">Selanjutnya ⟩</button>
+      </div>
+    </section>
 
-<div class="card" aria-label="draggable-card">
-  <h1>Draggable: Geser kotak ini</h1>
-  <div class="drag-area" id="dragArea">
-    <div class="draggable" id="draggable" role="button" tabindex="0">Seret aku</div>
-  </div>
-  <p style="margin:10px 0 0;font-size:13px;color:#346;">(Bisa pakai mouse atau sentuhan. Kotak dibatasi area di atas.)</p>
-</div>
+    <section id="projects" class="view card" data-route="/projects">
+      <h1>Project</h1>
+      <p class="lead">Contoh daftar project. Tombol di bawah memudahkan pindah antar-halaman.</p>
+      <ul>
+        <li>Project A — Demo</li>
+        <li>Project B — Demo</li>
+        <li>Project C — Demo</li>
+      </ul>
+      <div class="controls">
+        <button class="btn" id="prevBtn3">⟨ Sebelumnya</button>
+        <button class="btn primary" id="nextBtn3">Selanjutnya ⟩</button>
+      </div>
+    </section>
 
-<script>
-  /* ====== Carousel logic with touch support ====== */
-  (function(){
-    const carousel = document.getElementById('carousel');
-    const wrap = document.getElementById('carouselWrap');
-    const slides = carousel.children;
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const dotsContainer = document.getElementById('dots');
-    let index = 0, startX = null, isDragging = false, width = wrap.clientWidth;
+    <section id="contact" class="view card" data-route="/contact">
+      <h1>Kontak</h1>
+      <p class="lead">Email: nama@domain.tld<br/>Instagram: @contoh</p>
+      <div class="controls">
+        <button class="btn" id="prevBtn4">⟨ Sebelumnya</button>
+        <button class="btn primary" id="nextBtn4">Selanjutnya ⟩</button>
+      </div>
+    </section>
+  </main>
 
-    // create dots
-    for(let i=0;i<slides.length;i++){
-      const d = document.createElement('div');
-      d.className='dot' + (i===0?' active':'');
-      d.dataset.i = i;
-      d.addEventListener('click', ()=> goTo(i));
-      dotsContainer.appendChild(d);
+  <footer>Built for GitHub Pages • Hash routing (#/path) — cocok untuk repositori statis</footer>
+
+  <script>
+    // simple hash-based router and previous/next navigation
+    const routes = ['/', '/about', '/projects', '/contact'];
+    const routeToId = {'/':'home','/about':'about','/projects':'projects','/contact':'contact'};
+
+    function setActiveRoute(path){
+      if(!routes.includes(path)) path = '/';
+      // update views
+      document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+      const id = routeToId[path];
+      document.getElementById(id).classList.add('active');
+      // update nav link styles
+      document.querySelectorAll('.navlink').forEach(a=>a.classList.remove('active'));
+      const link = document.querySelector(`a[data-link='${path}']`);
+      if(link) link.classList.add('active');
+      // update hash if necessary
+      const desiredHash = '#'+path;
+      if(location.hash !== desiredHash) location.hash = desiredHash;
     }
 
-    function update(){
-      width = wrap.clientWidth;
-      carousel.style.transform = `translateX(${-index * width}px)`;
-      // update dots
-      Array.from(dotsContainer.children).forEach((d,i)=> d.classList.toggle('active', i===index));
-      prevBtn.disabled = (index===0);
-      nextBtn.disabled = (index===slides.length-1);
+    function onHashChanged(){
+      const raw = location.hash || '#/';
+      const path = raw.replace('#','');
+      setActiveRoute(path);
     }
 
-    function goTo(i){ index = Math.max(0, Math.min(slides.length-1, i)); update(); }
+    window.addEventListener('hashchange', onHashChanged);
 
-    prevBtn.addEventListener('click', ()=> goTo(index-1));
-    nextBtn.addEventListener('click', ()=> goTo(index+1));
-    window.addEventListener('resize', update);
+    // init
+    if(!location.hash) location.hash = '#/';
+    onHashChanged();
 
-    // touch / drag for swipe
-    wrap.addEventListener('touchstart', e => {
-      startX = e.touches[0].clientX;
-      isDragging = true;
-    }, {passive:true});
-    wrap.addEventListener('touchmove', e => {
-      if(!isDragging) return;
-      const dx = e.touches[0].clientX - startX;
-      carousel.style.transition = 'none';
-      carousel.style.transform = `translateX(${-index*width + dx}px)`;
-    }, {passive:true});
-    wrap.addEventListener('touchend', e => {
-      carousel.style.transition = '';
-      if(!isDragging) return;
-      const dx = (e.changedTouches[0].clientX - startX);
-      if(Math.abs(dx) > width*0.18){
-        if(dx < 0) goTo(index+1); else goTo(index-1);
-      } else {
-        update();
-      }
-      isDragging = false;
-      startX = null;
-    });
-
-    // mouse drag for desktop
-    let mouseDown = false, mouseStart = 0;
-    wrap.addEventListener('mousedown', e => { mouseDown=true; mouseStart = e.clientX; carousel.style.transition='none'; });
-    window.addEventListener('mousemove', e => {
-      if(!mouseDown) return;
-      const dx = e.clientX - mouseStart;
-      carousel.style.transform = `translateX(${-index*width + dx}px)`;
-    });
-    window.addEventListener('mouseup', e => {
-      if(!mouseDown) return;
-      const dx = e.clientX - mouseStart;
-      carousel.style.transition = '';
-      if(Math.abs(dx) > width*0.18) {
-        if(dx < 0) goTo(index+1); else goTo(index-1);
-      } else update();
-      mouseDown=false;
-    });
-
-    // keyboard arrows
-    window.addEventListener('keydown', e => {
-      if(e.key === 'ArrowLeft') goTo(index-1);
-      if(e.key === 'ArrowRight') goTo(index+1);
-    });
-
-    // initial layout
-    update();
-  })();
-
-  /* ====== Draggable box (bounded to area) ====== */
-  (function(){
-    const drag = document.getElementById('draggable');
-    const area = document.getElementById('dragArea');
-    let active=false, startX=0, startY=0, origX=0, origY=0;
-
-    // utility to keep inside bounds
-    function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
-
-    function pointerDown(clientX, clientY){
-      active = true;
-      startX = clientX;
-      startY = clientY;
-      const rect = drag.getBoundingClientRect();
-      const areaRect = area.getBoundingClientRect();
-      origX = rect.left - areaRect.left;
-      origY = rect.top - areaRect.top;
-      drag.style.transition = 'none';
-      drag.setPointerCapture && drag.setPointerCapture(event && event.pointerId);
+    // previous/next button wiring
+    function goToIndex(i){
+      const idx = (i + routes.length) % routes.length;
+      setActiveRoute(routes[idx]);
     }
 
-    function pointerMove(clientX, clientY){
-      if(!active) return;
-      const dx = clientX - startX;
-      const dy = clientY - startY;
-      const areaRect = area.getBoundingClientRect();
-      const dRect = drag.getBoundingClientRect();
-      const maxX = areaRect.width - dRect.width;
-      const maxY = areaRect.height - dRect.height;
-      const nx = clamp(origX + dx, 0, Math.max(0, maxX));
-      const ny = clamp(origY + dy, 0, Math.max(0, maxY));
-      drag.style.left = nx + 'px';
-      drag.style.top = ny + 'px';
+    // find index of current route
+    function currentIndex(){
+      const raw = location.hash || '#/';
+      const path = raw.replace('#','');
+      return routes.indexOf(path);
     }
 
-    function pointerUp(){
-      active=false;
-      drag.style.transition = '';
-    }
-
-    // Mouse events
-    drag.addEventListener('mousedown', e => { e.preventDefault(); pointerDown(e.clientX,e.clientY); });
-    window.addEventListener('mousemove', e => pointerMove(e.clientX,e.clientY));
-    window.addEventListener('mouseup', () => pointerUp());
-
-    // Touch events
-    drag.addEventListener('touchstart', e => { const t=e.touches[0]; pointerDown(t.clientX,t.clientY); }, {passive:false});
-    window.addEventListener('touchmove', e => { if(!active) return; const t=e.touches[0]; pointerMove(t.clientX,t.clientY); }, {passive:false});
-    window.addEventListener('touchend', pointerUp);
-
-    // Make draggable focusable and move with keyboard arrows for accessibility
-    drag.addEventListener('keydown', e => {
-      const step = 10;
-      const rect = drag.getBoundingClientRect();
-      const areaRect = area.getBoundingClientRect();
-      const dRect = drag.getBoundingClientRect();
-      const maxX = areaRect.width - dRect.width;
-      const maxY = areaRect.height - dRect.height;
-      const curLeft = rect.left - areaRect.left;
-      const curTop = rect.top - areaRect.top;
-      if(e.key === 'ArrowLeft') { drag.style.left = clamp(curLeft - step, 0, maxX) + 'px'; e.preventDefault(); }
-      if(e.key === 'ArrowRight') { drag.style.left = clamp(curLeft + step, 0, maxX) + 'px'; e.preventDefault(); }
-      if(e.key === 'ArrowUp') { drag.style.top = clamp(curTop - step, 0, maxY) + 'px'; e.preventDefault(); }
-      if(e.key === 'ArrowDown') { drag.style.top = clamp(curTop + step, 0, maxY) + 'px'; e.preventDefault(); }
+    // wire all .btn controls with role prev/next based on their container
+    document.querySelectorAll('.view').forEach((view, i)=>{
+      const prev = view.querySelector('.btn');
+      const next = view.querySelector('.btn.primary');
+      if(prev) prev.addEventListener('click', ()=> goToIndex(i-1));
+      if(next) next.addEventListener('click', ()=> goToIndex(i+1));
     });
 
-    // initialize position inside area in case styles differ
-    window.addEventListener('load', () => {
-      // ensure absolute positioned relative to area
-      const areaRect = area.getBoundingClientRect();
-      const dRect = drag.getBoundingClientRect();
-      // convert current computed left/top if present
-      drag.style.left = (parseFloat(getComputedStyle(drag).left) || 30) + 'px';
-      drag.style.top = (parseFloat(getComputedStyle(drag).top) || 30) + 'px';
+    // also allow left/right arrows
+    window.addEventListener('keydown', (e)=>{
+      if(e.key === 'ArrowLeft') goToIndex(currentIndex()-1);
+      if(e.key === 'ArrowRight') goToIndex(currentIndex()+1);
     });
 
-  })();
-</script>
-
+    // accessibility: allow clicking nav to set route without page jump
+    document.querySelectorAll('a[data-link]').forEach(a=>{
+      a.addEventListener('click', (ev)=>{
+        ev.preventDefault();
+        const path = a.getAttribute('data-link');
+        setActiveRoute(path);
+      });
+    });
+  </script>
 </body>
 </html>

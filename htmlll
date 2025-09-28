@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Curriculum Vitae</title>
+    <title>Profil GitHub - John Doe</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -13,183 +14,234 @@
         }
         
         body {
-            background-color: #f5f5f5;
-            color: #333;
-            line-height: 1.6;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             padding: 20px;
         }
         
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: white;
+            background-color: #161b22;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 500px;
             padding: 30px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        
-        header {
             text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #2c3e50;
-            padding-bottom: 20px;
+            border: 1px solid #30363d;
         }
         
-        h1 {
-            color: #2c3e50;
-            margin-bottom: 5px;
-        }
-        
-        .subtitle {
-            color: #7f8c8d;
-            font-size: 1.2em;
-            margin-bottom: 15px;
-        }
-        
-        .contact-info {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-top: 10px;
-        }
-        
-        .contact-info div {
+        .profile-header {
             display: flex;
             align-items: center;
-        }
-        
-        .contact-info i {
-            margin-right: 5px;
-            color: #3498db;
-        }
-        
-        section {
             margin-bottom: 25px;
+            text-align: left;
         }
         
-        h2 {
-            color: #2c3e50;
-            border-bottom: 1px solid #ecf0f1;
-            padding-bottom: 5px;
-            margin-bottom: 15px;
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #58a6ff;
+            margin-right: 20px;
         }
         
-        .experience-item, .education-item {
-            margin-bottom: 20px;
-        }
-        
-        .date {
-            color: #7f8c8d;
-            font-style: italic;
-        }
-        
-        ul {
-            padding-left: 20px;
-        }
-        
-        li {
+        .profile-info h1 {
+            color: #f0f6fc;
             margin-bottom: 5px;
+            font-size: 24px;
         }
         
-        .skills {
+        .profile-info .username {
+            color: #8b949e;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .profile-info .bio {
+            color: #c9d1d9;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .stats {
             display: flex;
-            flex-wrap: wrap;
+            justify-content: space-between;
+            margin: 25px 0;
+            padding: 15px 0;
+            border-top: 1px solid #30363d;
+            border-bottom: 1px solid #30363d;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            color: #f0f6fc;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .stat-label {
+            color: #8b949e;
+            font-size: 14px;
+        }
+        
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border-radius: 6px;
+            border: 1px solid #30363d;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             gap: 10px;
+            text-decoration: none;
         }
         
-        .skill-tag {
-            background-color: #ecf0f1;
-            padding: 5px 10px;
-            border-radius: 3px;
+        .btn-primary {
+            background-color: #238636;
+            color: white;
+            border-color: #2ea043;
         }
         
-        @media (max-width: 600px) {
+        .btn-primary:hover {
+            background-color: #2ea043;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: #21262d;
+            color: #c9d1d9;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #30363d;
+            transform: translateY(-2px);
+        }
+        
+        .btn-tertiary {
+            background-color: #1f6feb;
+            color: white;
+            border-color: #388bfd;
+        }
+        
+        .btn-tertiary:hover {
+            background-color: #388bfd;
+            transform: translateY(-2px);
+        }
+        
+        .icon {
+            font-size: 18px;
+        }
+        
+        .footer {
+            margin-top: 25px;
+            color: #8b949e;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 480px) {
             .container {
-                padding: 15px;
+                padding: 20px;
             }
             
-            .contact-info {
+            .profile-header {
                 flex-direction: column;
-                align-items: center;
+                text-align: center;
+            }
+            
+            .profile-img {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .btn {
+                padding: 10px 15px;
+                font-size: 14px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Nama Lengkap</h1>
-            <div class="subtitle">Posisi atau Profesi</div>
-            <div class="contact-info">
-                <div><i>📧</i> email@contoh.com</div>
-                <div><i>📱</i> +62 812-3456-7890</div>
-                <div><i>📍</i> Kota, Negara</div>
-                <div><i>🔗</i> linkedin.com/in/nama</div>
+        <div class="profile-header">
+            <img src="https://avatars.githubusercontent.com/u/583231?v=4" alt="Foto Profil" class="profile-img">
+            <div class="profile-info">
+                <h1>John Doe</h1>
+                <div class="username">johndoe</div>
+                <div class="bio">Full-stack developer passionate about open source. Building tools for developers.</div>
             </div>
-        </header>
+        </div>
         
-        <section id="tentang">
-            <h2>Tentang Saya</h2>
-            <p>Deskripsi singkat tentang diri Anda, minat karir, dan tujuan profesional. Jelaskan secara ringkas latar belakang, keahlian utama, dan apa yang membuat Anda unik.</p>
-        </section>
-        
-        <section id="pengalaman">
-            <h2>Pengalaman Kerja</h2>
-            <div class="experience-item">
-                <h3>Nama Pekerjaan - Perusahaan</h3>
-                <div class="date">Bulan Tahun - Bulan Tahun</div>
-                <ul>
-                    <li>Deskripsi tanggung jawab dan pencapaian utama</li>
-                    <li>Proyek atau inisiatif yang dikelola</li>
-                    <li>Pencapaian kuantitatif jika memungkinkan</li>
-                </ul>
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value">24</div>
+                <div class="stat-label">Repositories</div>
             </div>
+            <div class="stat">
+                <div class="stat-value">142</div>
+                <div class="stat-label">Followers</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">58</div>
+                <div class="stat-label">Following</div>
+            </div>
+        </div>
+        
+        <div class="btn-container">
+            <a href="#" class="btn btn-primary" onclick="nextPage()">
+                <i class="fas fa-arrow-right icon"></i>
+                Halaman Berikutnya
+            </a>
             
-            <div class="experience-item">
-                <h3>Nama Pekerjaan - Perusahaan</h3>
-                <div class="date">Bulan Tahun - Bulan Tahun</div>
-                <ul>
-                    <li>Deskripsi tanggung jawab dan pencapaian utama</li>
-                    <li>Proyek atau inisiatif yang dikelola</li>
-                    <li>Pencapaian kuantitatif jika memungkinkan</li>
-                </ul>
-            </div>
-        </section>
-        
-        <section id="pendidikan">
-            <h2>Pendidikan</h2>
-            <div class="education-item">
-                <h3>Nama Universitas atau Institusi</h3>
-                <div class="date">Tahun Masuk - Tahun Lulus</div>
-                <p>Jurusan atau Program Studi - Gelar</p>
-            </div>
+            <a href="#" class="btn btn-secondary" onclick="openInstagram()">
+                <i class="fab fa-instagram icon"></i>
+                Instagram Saya
+            </a>
             
-            <div class="education-item">
-                <h3>Nama Sekolah atau Institusi</h3>
-                <div class="date">Tahun Masuk - Tahun Lulus</div>
-                <p>Jurusan atau Program Studi</p>
-            </div>
-        </section>
+            <a href="#" class="btn btn-tertiary" onclick="viewPhotos()">
+                <i class="fas fa-images icon"></i>
+                Lihat Foto-foto
+            </a>
+        </div>
         
-        <section id="keahlian">
-            <h2>Keahlian</h2>
-            <div class="skills">
-                <span class="skill-tag">HTML/CSS</span>
-                <span class="skill-tag">JavaScript</span>
-                <span class="skill-tag">Python</span>
-                <span class="skill-tag">Manajemen Proyek</span>
-                <span class="skill-tag">Komunikasi</span>
-                <span class="skill-tag">Kepemimpinan</span>
-            </div>
-        </section>
-        
-        <section id="sertifikasi">
-            <h2>Sertifikasi</h2>
-            <ul>
-                <li>Nama Sertifikasi - Lembaga Penerbit (Tahun)</li>
-                <li>Nama Sertifikasi - Lembaga Penerbit (Tahun)</li>
-            </ul>
-        </section>
+        <div class="footer">
+            <p>© 2023 John Doe. Dibuat dengan <i class="fas fa-heart" style="color: #ea4aaa;"></i></p>
+        </div>
     </div>
+
+    <script>
+        function nextPage() {
+            alert("Anda akan diarahkan ke halaman berikutnya!");
+            // window.location.href = "halaman-berikutnya.html";
+        }
+        
+        function openInstagram() {
+            alert("Membuka akun Instagram!");
+            // window.open("https://instagram.com/username", "_blank");
+        }
+        
+        function viewPhotos() {
+            alert("Membuka galeri foto!");
+            // window.location.href = "galeri-foto.html";
+        }
+    </script>
 </body>
 </html>

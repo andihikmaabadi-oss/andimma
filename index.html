@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome</title>
-          {
+    <style>
+      {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
+        }  
+       body {
             background-color: #0d1117;
             color: #c9d1d9;
             min-height: 100vh;
@@ -162,84 +160,6 @@
             
             .profile-header {
                 flex-direction: column;
-                text-align: center;
-            }
-            
-            .profile-img {
-                margin-right: 0;
-                margin-bottom: 15px;
-            }
-            
-            .btn {
-                padding: 10px 15px;
-                font-size: 14px;
-            }
-        }
+                text-align: center;  
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="profile-header">
-            <img src="https://avatars.githubusercontent.com/u/583231?v=4" alt="Foto Profil" class="profile-img">
-            <div class="profile-info">
-                <h1>John Doe</h1>
-                <div class="username">johndoe</div>
-                <div class="bio">Full-stack developer passionate about open source. Building tools for developers.</div>
-            </div>
-        </div>
-        
-        <div class="stats">
-            <div class="stat">
-                <div class="stat-value">24</div>
-                <div class="stat-label">Repositories</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">142</div>
-                <div class="stat-label">Followers</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">58</div>
-                <div class="stat-label">Following</div>
-            </div>
-        </div>
-        
-        <div class="btn-container">
-            <a href="#" class="btn btn-primary" onclick="nextPage()">
-                <i class="fas fa-arrow-right icon"></i>
-                Halaman Berikutnya
-            </a>
-            
-            <a href="#" class="btn btn-secondary" onclick="openInstagram()">
-                <i class="fab fa-instagram icon"></i>
-                Instagram Saya
-            </a>
-            
-            <a href="#" class="btn btn-tertiary" onclick="viewPhotos()">
-                <i class="fas fa-images icon"></i>
-                Lihat Foto-foto
-            </a>
-        </div>
-        
-        <div class="footer">
-            <p>© 2023 John Doe. Dibuat dengan <i class="fas fa-heart" style="color: #ea4aaa;"></i></p>
-        </div>
-    </div>
-
-    <script>
-        function nextPage() {
-            alert("Anda akan diarahkan ke halaman berikutnya!");
-            // window.location.href = "halaman-berikutnya.html";
-        }
-        
-        function openInstagram() {
-            alert("Membuka akun Instagram!");
-            // window.open("https://instagram.com/username", "_blank");
-        }
-        
-        function viewPhotos() {
-            alert("Membuka galeri foto!");
-            // window.location.href = "galeri-foto.html";
-        }
-    </script>
-</body>
-</html>
